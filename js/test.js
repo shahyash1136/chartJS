@@ -100,20 +100,34 @@ RR.graphUI = function () {
     var test = [];
     var wicketImg = new Image();
     wicketImg.src = '/chart-wicket.png';
+
+    RR.inningData.push({totalRuns: 110, wicket: 3});
     for (let i = 0; i < RR.inningData.length; i++) {
         if (RR.inningData[i].wicket) {
             Chart.pluginService.register({
                 afterUpdate: function (chart) {
+                    console.log(chart.config);
+
                     chart.config.data.datasets[0]._meta[0].data[i]._model.pointStyle = wicketImg;
+                    if (RR.inningData[i].wicket > 1) {
+                        for (let j = 0; j < RR.inningData[i].wicket; j++) {
+                            chart.config.data.datasets[0]._meta[0].data[i]._model.pointStyle = wicketImg;
+                            chart.config.data.datasets[0]._meta[0].data[i]._model.pointStyle.style.marginBottom = 10+'px';
+                            
+                        }
+                    }
+
                 }
             });
         }
+
         var runs = RR.inningData[i].totalRuns
         test.push(runs)
 
     }
 
     //   const availableForExisting = teamBRuns;
+    RR.overNumber.push(21)
     const xData = RR.overNumber;
 
 
@@ -132,6 +146,7 @@ RR.graphUI = function () {
                 borderColor: colors.green.stroke,
                 data: test,
 
+
             }]
         },
         options: {
@@ -149,15 +164,15 @@ RR.graphUI = function () {
                     radius: 0
                 }
             },
-            
+
             scales: {
                 xAxes: [{
                     gridLines: {
-                        display:false
+                        display: false
                     }
                 }],
                 yAxes: [{
-                     
+
                     ticks: {
                         beginAtZero: false,
                     }
